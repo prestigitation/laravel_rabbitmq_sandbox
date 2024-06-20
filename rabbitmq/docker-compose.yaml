@@ -1,0 +1,16 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-container
+    ports:
+      - "5672:5672"    # проброс порта для AMQP
+      - "15672:15672"  # проброс порта для RabbitMQ Management
+    networks:
+      - laravel_rmq_polygon_network    # подключение к созданной сети
+    environment:
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+networks:
+  laravel_rmq_polygon_network:
+    external: true
