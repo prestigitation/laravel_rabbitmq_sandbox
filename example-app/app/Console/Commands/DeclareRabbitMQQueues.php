@@ -25,7 +25,7 @@ class DeclareRabbitMQQueues extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Declares the queues of RabbitMQ';
 
     /**
      * Execute the console command.

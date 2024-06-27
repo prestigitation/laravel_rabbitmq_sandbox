@@ -17,22 +17,16 @@
         @vite(['resources/css/main.css'])
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
-        <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
-            <img id="background" class="absolute -left-20 top-0 max-w-[877px]" src="https://laravel.com/assets/img/welcome/background.svg" />
-            <div class="w-full flex items-center justify-center">Билеты</div>
-            @if (session()->has('message') && session()->has('alert-class'))
-                <div class="alert" style="background: {{session()->get('alert-class') == 'alert-success' ? 'green' : 'red'}};">{{session()->get('message')}}</div>
-            @endif
-            @foreach ($flights as $flight)
-                <div class="bg-white flex justify-center" style="padding:6px;margin:24px">
-                    <span style="color:#1899b7">{{ $flight->start_time }}</span>&nbsp;{{ $flight->from }}<span class="flight__hours">{{\Illuminate\Support\Carbon::create($flight->start_time)->diffInHours(\Illuminate\Support\Carbon::create($flight->end_time))}}h</span>&nbsp;<span style="color:green">{{ $flight->end_time }}</span>&nbsp;{{ $flight->to }}
-                    <form method="POST" action="{{ route('tickets.store', ['flight_id' => $flight->id]) }}">
-                        @csrf
-                        <input type="email" name="email" placeholder="Введите свой e-mail" class="input">
-                        <button class="button">Забронировать</button>
-                    </form>
-                    <button class="button" onclick="window.location = 'flights/' + {{$flight->id}} + '/edit'">Редактировать</button>
-                </div>
-            @endforeach
+        <form method="POST" action="{{ route('flights.update', ['id' => $flight->id, 'flight' => $flight]) }}">
+            @csrf
+            @method("PATCH")
+            <div>
+                From: {{ $flight->from }} <input placeholder="Input new destination" class="input" name="from">
+            </div>
+            <div>
+                To: {{ $flight->to }} <input placeholder="Input new destination" class="input" name="to">
+            </div>
+            <button class="button">Save</button>
+        </form>
     </body>
 </html>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\FlightController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketController;
+use App\Http\Middleware\IsAdmin;
 use App\Models\Flight;
 use Illuminate\Support\Facades\Route;
 

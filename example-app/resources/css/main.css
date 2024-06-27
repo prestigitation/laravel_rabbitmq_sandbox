@@ -1,0 +1,30 @@
+.button {
+    border:1px solid blue;
+    padding-left:4px;
+    padding-right:4px;
+}
+.input {
+    border:1px solid black;
+    padding-left:2px;
+    margin-left:6px;
+    margin-right:6px;
+}
+.alert {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+    height: 48px;
+}
+
+
+.flight__hours {
+    margin-left:8px;
+    margin-right:8px;
+    background:#2929fb;
+    color:white;
+    padding:2px;
+}

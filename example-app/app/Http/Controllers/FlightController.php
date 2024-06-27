@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\SendEmailWhenFlightChanged;
 use Illuminate\Http\Request;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Requests\UpdateFlightRequest;
+use App\Models\Flight;
 
 class FlightController extends Controller
 {
+    public function __construct(private SendEmailWhenFlightChanged $sendEmailAboutUpdate) {
+        $this->middleware(IsAdmin::class)->only('edit');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -43,15 +50,22 @@ class FlightController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('flights.flight_edit', [
+            'flight' => Flight::find($id)
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateFlightRequest $request, string $id)
     {
-        //
+        $changes = $request->validated();
+        Flight::find($id)->update($changes);
+
+        $this->sendEmailAboutUpdate->handle($changes);
+
+        return redirect("/")->with('message', 'You successfully changed the flight!')->with('alert-class', 'alert-success');
     }
 
     /**

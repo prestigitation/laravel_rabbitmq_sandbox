@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Flight;
+use App\Observers\FlightObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
