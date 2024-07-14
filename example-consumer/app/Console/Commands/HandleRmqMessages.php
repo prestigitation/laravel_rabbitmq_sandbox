@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\BookingChangedMailable;
 use App\Mail\BookingSuccessMailable;
 use App\Services\RabbitMQService;
 use Illuminate\Console\Command;
@@ -42,7 +43,13 @@ class HandleRmqMessages extends Command
             Mail::to($messageBody->email)->send(new BookingSuccessMailable($messageBody->flight));
         };
 
+        $handleBookingChange = function ($message) {
+            $messageBody = json_decode($message->body);
+            Mail::to($messageBody->email)->send(new BookingChangedMailable($messageBody->changes));
+        };
+
         $channel->basic_consume('EmailQueue', 'booking.success.email', false, true, false, false, $handleSuccessBooking);
+        $channel->basic_consume('FlightQueue', 'booking.flight.#', false, true, false, false, $handleBookingChange);
 
         while($channel->is_open()) {
             $channel->wait();

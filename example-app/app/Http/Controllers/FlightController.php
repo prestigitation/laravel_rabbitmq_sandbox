@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Requests\UpdateFlightRequest;
 use App\Models\Flight;
+use App\Models\Ticket;
 
 class FlightController extends Controller
 {
@@ -63,7 +64,14 @@ class FlightController extends Controller
         $changes = $request->validated();
         Flight::find($id)->update($changes);
 
-        $this->sendEmailAboutUpdate->handle($changes);
+        foreach(Ticket::where('flight_id', $id)->get()->pluck('email') as $email) {
+            //finding the users on this flight and give them notification
+            $this->sendEmailAboutUpdate->handle([
+                'flight' => Flight::find($id),
+                'changes' => $changes,
+                'email' => $email
+            ]);
+        }
 
         return redirect("/")->with('message', 'You successfully changed the flight!')->with('alert-class', 'alert-success');
     }

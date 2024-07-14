@@ -40,7 +40,7 @@ class DeclareRabbitMQQueues extends Command
         $channel->queue_declare('FlightQueue', false, true, false, false);
 
         $channel->queue_bind('EmailQueue', 'EmailExchange', 'booking.success.email');
-        $channel->queue_bind('FlightQueue', 'FlightExchange', 'booking.*.#');
+        $channel->queue_bind('FlightQueue', 'FlightExchange', 'booking.flight.#');
 
         $channel->close();
     }
